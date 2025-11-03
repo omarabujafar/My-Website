@@ -1,0 +1,39 @@
+.photo-circle {
+  width: 72%;
+  height: 72%;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(0.5px);
+}
+
+.photo-circle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 30px 10px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.dark .photo-circle::after {
+  box-shadow: inset 0 0 40px 15px rgba(5, 0, 15, 0.8);
+}
+
+.photo-circle img {
+  width: 165%;
+  height: 165%;
+  object-fit: cover;
+  object-position: 50% 60%;
+  transform: translateY(120px);
+}

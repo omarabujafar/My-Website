@@ -23,7 +23,7 @@
   height: 100%;
 }
 
-.hero-orb-container {
+.hero-stack {
   width: 550px;
   height: 550px;
   max-width: 90vw;
@@ -32,16 +32,34 @@
   margin-top: -8rem;
 }
 
+.hero-photo-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-orb-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
 /* Responsive sizing */
 @media (max-width: 768px) {
-  .hero-orb-container {
+  .hero-stack {
     width: 370px;
     height: 370px;
   }
 }
 
 @media (max-width: 480px) {
-  .hero-orb-container {
+  .hero-stack {
     width: 275px;
     height: 275px;
   }

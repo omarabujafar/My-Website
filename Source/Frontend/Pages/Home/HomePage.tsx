@@ -1,6 +1,7 @@
 import React from 'react'
 import PageTransition from '@Universal/Components/PageTransition/PageTransition'
 import Orb from '@Universal/Components/Orb/Orb'
+import PhotoCircle from '@Universal/Components/PhotoCircle/PhotoCircle'
 import './HomePage.css'
 
 const HomePage: React.FC = () => {
@@ -9,13 +10,18 @@ const HomePage: React.FC = () => {
       <div className="home-page">
         <section className="hero-section">
           <div className="hero-content">
-            <div className="hero-orb-container">
-              <Orb
-                hoverIntensity={0.3}
-                rotateOnHover={false}
-                hue={0}
-                forceHoverState={false}
-              />
+            <div className="hero-stack">
+              <div className="hero-photo-container">
+                <PhotoCircle />
+              </div>
+              <div className="hero-orb-container">
+                <Orb
+                  hoverIntensity={0.3}
+                  rotateOnHover={false}
+                  hue={0}
+                  forceHoverState={false}
+                />
+              </div>
             </div>
           </div>
         </section>

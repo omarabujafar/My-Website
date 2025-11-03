@@ -137,45 +137,12 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
       float v2 = smoothstep(1.0, mix(innerRadius, 1.0, n0 * 0.5), len);
       float v3 = smoothstep(innerRadius, mix(innerRadius, 1.0, 0.5), len);
 
-      // Define photo circle radius (smaller than orb)
-      float photoCircleRadius = 0.7; // Adjust this to change photo circle size
-      float photoCircleEdge = 0.02; // Soft edge for the circle
-
-      // Use original UV (unaffected by hover) for the circle
-      float circleLen = length(originalUv);
-
-      // Check if we're inside the circle first
-      if (circleLen < photoCircleRadius) {
-        // Inside the circle - render photo, unaffected by orb
-        float circleMask = smoothstep(photoCircleRadius, photoCircleRadius - photoCircleEdge, circleLen);
-
-        if (circleMask > 0.5 && uTextureLoaded > 0.5) {
-          // Completely inside circle - show photo
-          vec2 texUv = originalUv / photoCircleRadius * 0.5 + 0.5;
-          vec4 photoColor = texture2D(uTexture, texUv);
-          return extractAlpha(photoColor.rgb);
-        } else {
-          // At the edge - blend between orb and circle
-          vec3 col = mix(color1, color2, cl);
-          col = mix(color3, col, v0);
-          col = (col + v1) * v2 * v3;
-          col = clamp(col, 0.0, 1.0);
-
-          if (uTextureLoaded > 0.5) {
-            vec2 texUv = originalUv / photoCircleRadius * 0.5 + 0.5;
-            vec4 photoColor = texture2D(uTexture, texUv);
-            col = mix(col, photoColor.rgb, circleMask);
-          }
-          return extractAlpha(col);
-        }
-      } else {
-        // Outside circle - normal orb rendering
-        vec3 col = mix(color1, color2, cl);
-        col = mix(color3, col, v0);
-        col = (col + v1) * v2 * v3;
-        col = clamp(col, 0.0, 1.0);
-        return extractAlpha(col);
-      }
+      // Normal orb rendering only
+      vec3 col = mix(color1, color2, cl);
+      col = mix(color3, col, v0);
+      col = (col + v1) * v2 * v3;
+      col = clamp(col, 0.0, 1.0);
+      return extractAlpha(col);
     }
 
     vec4 mainImage(vec2 fragCoord) {
