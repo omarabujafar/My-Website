@@ -1,0 +1,120 @@
+.navigation {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  z-index: 9999;
+  will-change: transform;
+  pointer-events: auto;
+}
+
+.navigation-glass {
+  padding: 0 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.navigation-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.nav-indicator {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.3s ease, border-color 0.3s ease;
+  pointer-events: none;
+  left: 0;
+  top: 50%;
+  z-index: 0;
+}
+
+.dark .nav-indicator {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.nav-item {
+  margin: 0;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  position: relative;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  background: transparent;
+}
+
+.dark .nav-link:hover {
+  background: transparent;
+}
+
+.nav-icon {
+  width: 24px;
+  height: 24px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  filter: brightness(0) invert(0);
+}
+
+.dark .nav-icon {
+  filter: brightness(0) invert(1);
+}
+
+.nav-link:hover .nav-icon {
+  opacity: 0.9;
+}
+
+.nav-link--active .nav-icon {
+  opacity: 1;
+}
+
+.nav-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.2);
+  margin: 0 6px;
+  transition: background 0.3s ease;
+}
+
+.dark .nav-divider {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-theme-toggle {
+  flex-shrink: 0;
+  margin-right: 2px;
+}
