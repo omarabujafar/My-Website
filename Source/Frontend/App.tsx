@@ -28,7 +28,7 @@ function App() {
   return (
     <>
       <LoadingScreen />
-      <Router>
+      <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <Layout>
           <AnimatedRoutes />
         </Layout>

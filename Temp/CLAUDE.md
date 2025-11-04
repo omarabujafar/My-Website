@@ -375,6 +375,17 @@ font-family: [Primary Font], "system-ui", "Helvetica Neue", Arial, sans-serif;
    - Analytics
    - SEO optimization
 
+### 💡 Future Implementations
+
+1. **Dynamic Island Component (Skiper-UI)**
+   - iOS-inspired Dynamic Island component with multiple animated states
+   - Component from Skiper-UI (premium component): https://skiper-ui.com/v1/skiper2
+   - States: idle, ring, timer, music, airdrop, record, phone, lowBattery, findmy, screenRecord
+   - Requires creating 9 sub-components in `_components/` folder
+   - Dependencies: framer-motion, lucide-react (already installed)
+   - Note: Main component file provided by Skiper-UI, but sub-components need custom implementation
+   - Consider implementing when ready to add interactive UI elements to the portfolio
+
 ---
 
 ## Development Workflow

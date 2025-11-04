@@ -1,7 +1,12 @@
 .header {
-  background-color: #1a1a1a;
+  background-color: transparent;
   padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 .header-container {
@@ -10,10 +15,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 2rem;
 }
 
-.logo h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo img {
+  height: 140px;
+  width: auto;
+  display: block;
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import Navigation from '../Navigation/Navigation'
+import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
 import './Layout.css'
 
@@ -10,7 +10,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="layout">
-      <Navigation />
+      <Header />
       <main className="main-content">
         {children}
       </main>
