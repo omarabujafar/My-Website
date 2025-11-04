@@ -33,12 +33,13 @@ const HomePage: React.FC = () => {
                   forceHoverState={false}
                 />
               </div>
-            </div>
-            <div className={`hero-text ${isLoaded ? 'loaded' : ''}`}>
-              <h1 className="hero-heading">Hey, I'm Omar.</h1>
-              <p className="hero-subtitle">
-                Aiming to develop impactful solutions with infinite simplicity — and cool calculator apps.
-              </p>
+              <div className="hero-gradient-fade"></div>
+              <div className={`hero-text ${isLoaded ? 'loaded' : ''}`}>
+                <h1 className="hero-heading">Hey, I'm Omar.</h1>
+                <p className="hero-subtitle">
+                  Developing impactful solutions with intentional simplicity — and calculator apps with a suspicious amount of polish.
+                </p>
+              </div>
             </div>
           </div>
         </section>

@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Font Imports */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('./Assets/Fonts/Bricolage_Grotesque/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Figtree';
+  src: url('./Assets/Fonts/Figtree/Figtree-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Figtree';
+  src: url('./Assets/Fonts/Figtree/Figtree-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('./Assets/Fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('./Assets/Fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -14,21 +50,31 @@
 
   /* Light theme colors */
   --background: #ECECF1;
+  --background-rgb: 236, 236, 241;
   --foreground: #0a0a0a;
   --muted: #f5f5f5;
   --muted-foreground: #737373;
   --accent: #f5f5f5;
   --accent-foreground: #0a0a0a;
+
+  /* Text colors */
+  --text-primary: #0E0E16;
+  --text-secondary: #5B5B66;
 }
 
 .dark {
   /* Dark theme colors */
   --background: #05000f;
+  --background-rgb: 5, 0, 15;
   --foreground: rgba(255, 255, 255, 0.87);
   --muted: #3a3a3a;
   --muted-foreground: #a1a1a1;
   --accent: #3a3a3a;
   --accent-foreground: rgba(255, 255, 255, 0.87);
+
+  /* Text colors */
+  --text-primary: #F5F5F7;
+  --text-secondary: #C3C3CC;
 }
 
 :root,
