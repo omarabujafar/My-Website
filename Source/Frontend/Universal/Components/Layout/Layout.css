@@ -6,6 +6,39 @@
   position: relative;
 }
 
+/* Dynamic Island */
+.dynamic-island-wrapper {
+  position: fixed;
+  top: 37.5px;
+  right: 2rem;
+  z-index: 9998;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.dynamic-island-capsule {
+  background-color: var(--color-black, #000);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-glass,
+    #ffffff08 0px 7.2563px 14.5126px 0px inset,
+    #ffffff0f 0px 0.5px 0.5px 0px inset,
+    #ffffff1f 0px 0.25px 0.25px 0px inset,
+    #0000005e 0px 14.2111px 20.2815px -5.47742px);
+}
+
+.dark .dynamic-island-capsule {
+  background-color: var(--color-black, #000) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Light mode - make it slightly lighter so it's visible */
+:root .dynamic-island-capsule {
+  background-color: #1a1a1a !important;
+}
+
 .main-content {
   flex: 1;
   width: 100%;
