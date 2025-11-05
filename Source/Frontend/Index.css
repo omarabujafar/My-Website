@@ -38,6 +38,15 @@
   font-style: italic;
 }
 
+@font-face {
+  font-family: 'Fruitos';
+  src: url('./Assets/Fonts/fruitos/FruitosR.woff2') format('woff2'),
+       url('./Assets/Fonts/fruitos/FruitosR.woff') format('woff'),
+       url('./Assets/Fonts/fruitos/FruitosR.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -116,4 +125,36 @@ body {
   width: 100%;
   min-height: 100vh;
   position: relative;
+}
+
+/* Dynamic Island Utilities */
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.fcc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bg-muted2 {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .bg-muted2 {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.bg-muted3 {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark .bg-muted3 {
+  background-color: rgba(0, 0, 0, 0.4);
 }

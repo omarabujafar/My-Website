@@ -10,6 +10,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@appletosolutions/reactbits": "^1.0.3",
     "@lottiefiles/dotlottie-react": "^0.17.6",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",

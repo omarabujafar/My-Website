@@ -4,6 +4,39 @@
   min-height: 100vh;
 }
 
+/* Dynamic Island */
+.dynamic-island-wrapper {
+  position: fixed;
+  top: 37.5px;
+  right: 2rem;
+  z-index: 9998;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.dynamic-island-capsule {
+  background-color: var(--color-black, #000);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-glass,
+    #ffffff08 0px 7.2563px 14.5126px 0px inset,
+    #ffffff0f 0px 0.5px 0.5px 0px inset,
+    #ffffff1f 0px 0.25px 0.25px 0px inset,
+    #0000005e 0px 14.2111px 20.2815px -5.47742px);
+}
+
+.dark .dynamic-island-capsule {
+  background-color: var(--color-black, #000) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Light mode - make it slightly lighter so it's visible */
+:root .dynamic-island-capsule {
+  background-color: #1a1a1a !important;
+}
+
 /* Hero Section */
 .hero-section {
   min-height: 100vh;
@@ -13,21 +46,23 @@
   padding: 2rem;
   padding-top: 8rem;
   position: relative;
+  overflow: visible;
 }
 
-.hero-particles {
-  position: fixed;
-  top: 0;
-  left: 0;
+.hero-threads-container {
+  position: absolute;
+  top: -10rem;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100vw;
   height: 100vh;
   z-index: 0;
   pointer-events: none;
+  background: transparent;
 }
 
-.hero-particles > div {
-  width: 100% !important;
-  height: 100% !important;
+.hero-threads-container canvas {
+  background: transparent !important;
 }
 
 .hero-content {
@@ -37,7 +72,7 @@
   width: 100%;
   height: 100%;
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
 .hero-stack {
@@ -47,11 +82,56 @@
   max-height: 90vw;
   position: relative;
   margin-top: -8rem;
-  background-color: transparent;
+  background: none !important;
+  background-color: transparent !important;
+  outline: none !important;
+  border: none !important;
 }
 
-.hero-stack canvas {
+.hero-stack::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #05000f;
+  mask-image:
+    radial-gradient(circle at center, black 0%, black 60%, transparent 60.1%),
+    linear-gradient(to top, black 0%, black 20%, transparent 20.1%);
+  -webkit-mask-image:
+    radial-gradient(circle at center, black 0%, black 60%, transparent 60.1%),
+    linear-gradient(to top, black 0%, black 20%, transparent 20.1%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.hero-stack *,
+.hero-stack.loaded * {
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+}
+
+.hero-stack canvas,
+.hero-stack.loaded canvas {
+  background: transparent !important;
   background-color: transparent !important;
+  background-image: none !important;
+}
+
+.hero-stack,
+.hero-stack.loaded {
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+}
+
+.hero-stack::before,
+.hero-stack::after,
+.hero-stack.loaded::before,
+.hero-stack.loaded::after {
+  display: none !important;
+  content: none !important;
 }
 
 @keyframes heroEnter {
@@ -85,7 +165,51 @@
   z-index: 1;
   opacity: 0;
   transform: scale(0.8);
-  background-color: transparent;
+  background: none !important;
+  background-color: transparent !important;
+}
+
+.hero-photo-container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 25%;
+  background: linear-gradient(
+    to top,
+    var(--background) 0%,
+    var(--background) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 11;
+}
+
+.hero-photo-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--background) 0%,
+    var(--background) 25%,
+    transparent 35%
+  );
+  mask-image: radial-gradient(
+    circle at center,
+    black 0%,
+    black 58%,
+    transparent 62%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    black 0%,
+    black 58%,
+    transparent 62%
+  );
+  pointer-events: none;
+  z-index: 10;
 }
 
 .hero-stack.loaded .hero-photo-container {
@@ -101,7 +225,71 @@
   z-index: 2;
   opacity: 0;
   transform: scale(0.8);
-  background-color: transparent;
+  background: none !important;
+  isolation: isolate;
+}
+
+.hero-orb-container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 25%;
+  background: linear-gradient(
+    to top,
+    var(--background) 0%,
+    var(--background) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 101;
+}
+
+.hero-orb-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--background) 0%,
+    var(--background) 25%,
+    transparent 35%
+  );
+  mask-image: radial-gradient(
+    circle at center,
+    black 0%,
+    black 58%,
+    transparent 62%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    black 0%,
+    black 58%,
+    transparent 62%
+  );
+  pointer-events: none;
+  z-index: 100;
+}
+
+.hero-orb-container > div {
+  background: none !important;
+  background-color: transparent !important;
+  width: 100% !important;
+  height: 100% !important;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-orb-container > div canvas {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-orb-container canvas {
+  background: none !important;
+  background-color: transparent !important;
+  display: block !important;
 }
 
 .hero-stack.loaded .hero-orb-container {
@@ -109,30 +297,10 @@
   animation-delay: 0.2s;
 }
 
-/* Gradient Fade Overlay */
-.hero-gradient-fade {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 85%;
-  background: linear-gradient(
-    to top,
-    var(--background) 0%,
-    var(--background) 25%,
-    rgba(var(--background-rgb), 0.95) 40%,
-    rgba(var(--background-rgb), 0.8) 55%,
-    rgba(var(--background-rgb), 0.5) 70%,
-    transparent 100%
-  );
-  z-index: 2;
-  pointer-events: none;
-}
-
 /* Hero Text Styles */
 .hero-text {
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   text-align: center;
@@ -140,8 +308,12 @@
   max-width: 1200px;
   padding: 0 2rem;
   opacity: 0;
-  z-index: 3;
+  z-index: 6;
   pointer-events: none;
+}
+
+.hero-text > * {
+  position: relative;
 }
 
 @keyframes heroTextEnter {

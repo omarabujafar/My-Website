@@ -8,21 +8,21 @@ interface PageTransitionProps {
 const pageVariants = {
   initial: {
     opacity: 0,
-    y: 10
+    scale: 0.99
   },
   in: {
     opacity: 1,
-    y: 0
+    scale: 1
   },
   out: {
     opacity: 0,
-    y: -10
+    scale: 1.01
   }
 }
 
 const pageTransition = {
-  duration: 0.2,
-  ease: [0.4, 0, 0.2, 1]
+  duration: 0.4,
+  ease: [0.25, 0.46, 0.45, 0.94]
 }
 
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
@@ -33,7 +33,11 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
       exit="out"
       variants={pageVariants}
       transition={pageTransition}
-      style={{ width: '100%' }}
+      style={{
+        width: '100%',
+        backgroundColor: 'var(--background)',
+        minHeight: '100vh'
+      }}
     >
       {children}
     </motion.div>

@@ -1,0 +1,72 @@
+@font-face {
+    font-family: 'Fruitos R Inline';
+    src: url('FruitosRInline.eot');
+    src: local('Fruitos R Inline'), local('FruitosRInline'),
+        url('FruitosRInline.eot?#iefix') format('embedded-opentype'),
+        url('FruitosRInline.woff2') format('woff2'),
+        url('FruitosRInline.woff') format('woff'),
+        url('FruitosRInline.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Fruitos R Line';
+    src: url('FruitosRLine.eot');
+    src: local('Fruitos R Line'), local('FruitosRLine'),
+        url('FruitosRLine.eot?#iefix') format('embedded-opentype'),
+        url('FruitosRLine.woff2') format('woff2'),
+        url('FruitosRLine.woff') format('woff'),
+        url('FruitosRLine.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Fruitos R';
+    src: url('FruitosR.eot');
+    src: local('Fruitos R'), local('FruitosR'),
+        url('FruitosR.eot?#iefix') format('embedded-opentype'),
+        url('FruitosR.woff2') format('woff2'),
+        url('FruitosR.woff') format('woff'),
+        url('FruitosR.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Fruitos S';
+    src: url('FruitosS.eot');
+    src: local('Fruitos S'), local('FruitosS'),
+        url('FruitosS.eot?#iefix') format('embedded-opentype'),
+        url('FruitosS.woff2') format('woff2'),
+        url('FruitosS.woff') format('woff'),
+        url('FruitosS.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Fruitos S Inline';
+    src: url('FruitosSInline.eot');
+    src: local('Fruitos S Inline'), local('FruitosSInline'),
+        url('FruitosSInline.eot?#iefix') format('embedded-opentype'),
+        url('FruitosSInline.woff2') format('woff2'),
+        url('FruitosSInline.woff') format('woff'),
+        url('FruitosSInline.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Fruitos S Line';
+    src: url('FruitosSLine.eot');
+    src: local('Fruitos S Line'), local('FruitosSLine'),
+        url('FruitosSLine.eot?#iefix') format('embedded-opentype'),
+        url('FruitosSLine.woff2') format('woff2'),
+        url('FruitosSLine.woff') format('woff'),
+        url('FruitosSLine.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+

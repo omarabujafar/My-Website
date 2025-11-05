@@ -1,25 +1,30 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
+import { lazy, Suspense } from 'react'
 import HomePage from '@Pages/Home/HomePage'
-import AboutPage from '@Pages/About/AboutPage'
-import ProjectsPage from '@Pages/Projects/ProjectsPage'
-import BlogPage from '@Pages/Blog/BlogPage'
-import ContactPage from '@Pages/Contact/ContactPage'
 import Layout from '@Universal/Components/Layout/Layout'
 import LoadingScreen from '@Universal/Components/LoadingScreen/LoadingScreen'
+
+// Lazy load non-critical pages
+const AboutPage = lazy(() => import('@Pages/About/AboutPage'))
+const ProjectsPage = lazy(() => import('@Pages/Projects/ProjectsPage'))
+const BlogPage = lazy(() => import('@Pages/Blog/BlogPage'))
+const ContactPage = lazy(() => import('@Pages/Contact/ContactPage'))
 
 function AnimatedRoutes() {
   const location = useLocation()
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-      </Routes>
+      <Suspense fallback={null}>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Routes>
+      </Suspense>
     </AnimatePresence>
   )
 }

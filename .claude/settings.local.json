@@ -9,7 +9,11 @@
       "Bash(npx shadcn@latest add:*)",
       "Bash(pkill:*)",
       "mcp__ide__getDiagnostics",
-      "WebFetch(domain:skiper-ui.com)"
+      "WebFetch(domain:skiper-ui.com)",
+      "WebSearch",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(git -C:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []

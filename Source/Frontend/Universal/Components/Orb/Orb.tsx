@@ -113,12 +113,18 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
     }
 
     vec4 draw(vec2 uv) {
+      float len = length(uv);
+
+      // Make everything outside radius 1.2 completely transparent
+      if (len > 1.2) {
+        return vec4(0.0, 0.0, 0.0, 0.0);
+      }
+
       vec3 color1 = adjustHue(baseColor1, hue);
       vec3 color2 = adjustHue(baseColor2, hue);
       vec3 color3 = adjustHue(baseColor3, hue);
 
       float ang = atan(uv.y, uv.x);
-      float len = length(uv);
       float invLen = len > 0.0 ? 1.0 / len : 0.0;
 
       float n0 = snoise3(vec3(uv * noiseScale, iTime * 0.5)) * 0.5 + 0.5;
@@ -183,7 +189,18 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
     const renderer = new Renderer({ alpha: true, premultipliedAlpha: false });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
-    container.appendChild(gl.canvas);
+
+    // Ensure canvas has transparent background
+    const canvas = gl.canvas as HTMLCanvasElement;
+    canvas.style.removeProperty('background');
+    canvas.style.backgroundColor = 'transparent';
+    canvas.style.opacity = '1';
+
+    // Enable alpha blending
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    container.appendChild(canvas);
 
     const geometry = new Triangle(gl);
 
@@ -302,5 +319,5 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hue, hoverIntensity, rotateOnHover, forceHoverState]);
 
-  return <div ref={ctnDom} className="w-full h-full" />;
+  return <div ref={ctnDom} className="w-full h-full" style={{ background: 'transparent' }} />;
 }

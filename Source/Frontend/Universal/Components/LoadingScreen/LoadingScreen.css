@@ -4,16 +4,16 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #242424;
+  background-color: var(--background);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 99999;
-  opacity: 1;
-  transition: opacity 0.8s ease-out;
   pointer-events: all;
   touch-action: none;
   user-select: none;
+  opacity: 1;
+  transition: opacity 0.8s ease-out;
 }
 
 .loading-screen--exiting {
