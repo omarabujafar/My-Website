@@ -16,7 +16,17 @@
     <!-- Prevent flash of unstyled content by setting theme before render -->
     <script>
       (function() {
-        const theme = localStorage.getItem('theme') || 'dark';
+        const savedTheme = localStorage.getItem('theme');
+        let theme;
+
+        if (savedTheme) {
+          theme = savedTheme;
+        } else {
+          // Use system preference
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          theme = prefersDark ? 'dark' : 'light';
+        }
+
         document.documentElement.classList.add(theme);
       })();
     </script>

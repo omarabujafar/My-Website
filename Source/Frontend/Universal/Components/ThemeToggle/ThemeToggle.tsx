@@ -2,9 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@Universal/Utils/cn'
 import { useTheme } from '../ThemeProvider/ThemeProvider'
+import { ThemeToggleButton5 } from './ThemeToggleButton5'
 import './ThemeToggle.css'
-import DarkIcon from '@Assets/Icons/Navbar Icons/Dark.svg'
-import LightIcon from '@Assets/Icons/Navbar Icons/Light.svg'
 
 type AnimationVariant = 'circle' | 'rectangle'
 type AnimationStart = 'center' | 'bottom-up'
@@ -41,34 +40,28 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className }) => 
       }
 
       ::view-transition-new(root) {
-        filter: blur(0px);
         animation-name: reveal-light;
       }
 
       .dark::view-transition-new(root) {
-        filter: blur(0px);
         animation-name: reveal-dark;
       }
 
       @keyframes reveal-dark {
         from {
-          clip-path: circle(0% at 50% 100%);
-          filter: blur(12px);
+          clip-path: circle(0% at 50% 0%);
         }
         to {
-          clip-path: circle(150% at 50% 100%);
-          filter: blur(0px);
+          clip-path: circle(150% at 50% 0%);
         }
       }
 
       @keyframes reveal-light {
         from {
-           clip-path: circle(0% at 50% 100%);
-           filter: blur(12px);
+           clip-path: circle(0% at 50% 0%);
         }
         to {
-          clip-path: circle(150% at 50% 100%);
-          filter: blur(0px);
+          clip-path: circle(150% at 50% 0%);
         }
       }
     `
@@ -101,46 +94,10 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className }) => 
   }, [theme, setTheme, isDark, createAnimation])
 
   return (
-    <button
-      type="button"
-      className={cn('theme-toggle', className)}
+    <ThemeToggleButton5
+      isDark={isDark}
       onClick={toggleTheme}
-      aria-label="Toggle theme"
-    >
-      <span className="sr-only">Toggle theme</span>
-      <div className="theme-toggle-icon-wrapper">
-        <AnimatePresence mode="wait" initial={false}>
-          {isDark ? (
-            <motion.img
-              key="dark"
-              src={DarkIcon}
-              alt="Dark mode"
-              className="theme-toggle-icon"
-              initial={{ rotate: -180, opacity: 0, scale: 0.5 }}
-              animate={{ rotate: 0, opacity: 1, scale: 1 }}
-              exit={{ rotate: 180, opacity: 0, scale: 0.5 }}
-              transition={{
-                duration: 0.5,
-                ease: [0.4, 0.0, 0.2, 1]
-              }}
-            />
-          ) : (
-            <motion.img
-              key="light"
-              src={LightIcon}
-              alt="Light mode"
-              className="theme-toggle-icon"
-              initial={{ rotate: 180, opacity: 0, scale: 0.5 }}
-              animate={{ rotate: 0, opacity: 1, scale: 1 }}
-              exit={{ rotate: -180, opacity: 0, scale: 0.5 }}
-              transition={{
-                duration: 0.5,
-                ease: [0.4, 0.0, 0.2, 1]
-              }}
-            />
-          )}
-        </AnimatePresence>
-      </div>
-    </button>
+      className={cn('theme-toggle', className)}
+    />
   )
 }

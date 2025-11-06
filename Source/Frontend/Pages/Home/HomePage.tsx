@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import PageTransition from '@Universal/Components/PageTransition/PageTransition'
-import Orb from '@Universal/Components/Orb/Orb'
 import PhotoCircle from '@Universal/Components/PhotoCircle/PhotoCircle'
 import IconCarousel from '@Universal/Components/IconCarousel/IconCarousel'
 import Threads from '@Universal/Components/Threads/Threads'
+import HeroOrb from '@Universal/Components/HeroOrb/HeroOrb'
+import SplitText from '@Universal/Components/SplitText/SplitText'
 import './HomePage.css'
 
 const HomePage: React.FC = () => {
@@ -15,18 +16,20 @@ const HomePage: React.FC = () => {
     ? [1, 1, 1]
     : [5/255, 0/255, 15/255]
 
-  // Orb colors: purple/blue gradient in dark mode, dark (#05000f) shades in light mode
-  const orbColor1: [number, number, number] | undefined = isDarkMode
-    ? undefined  // Use default purple
-    : [5/255, 0/255, 15/255]  // Dark #05000f
-
-  const orbColor2: [number, number, number] | undefined = isDarkMode
-    ? undefined  // Use default blue
-    : [10/255, 5/255, 25/255]  // Slightly lighter dark shade
-
-  const orbColor3: [number, number, number] | undefined = isDarkMode
-    ? undefined  // Use default deep blue
-    : [2/255, 0/255, 8/255]  // Even darker shade
+  // HeroOrb colors: match thread colors with slightly lighter backgrounds
+  const heroOrbColors = isDarkMode
+    ? {
+        bg: "oklch(12% 0.02 264.695)",  // Slightly lighter than dark background #05000f
+        c1: "oklch(100% 0 0)",          // White (matching dark mode threads)
+        c2: "oklch(100% 0 0)",          // White
+        c3: "oklch(100% 0 0)",          // White
+      }
+    : {
+        bg: "oklch(95% 0.005 264.695)", // Slightly lighter than light background #ECECF1
+        c1: "oklch(10% 0.02 264.695)",  // Dark #05000f (matching light mode threads)
+        c2: "oklch(10% 0.02 264.695)",  // Dark #05000f
+        c3: "oklch(10% 0.02 264.695)",  // Dark #05000f
+      }
 
   useEffect(() => {
     // Wait for PageTransition to complete before triggering hero animations
@@ -65,22 +68,46 @@ const HomePage: React.FC = () => {
           </div>
           <div className="hero-content">
             <div className={`hero-stack ${isLoaded ? 'loaded' : ''}`}>
+              <div className="hero-orb-container">
+                <HeroOrb
+                  size="400px"
+                  animationDuration={15}
+                  colors={heroOrbColors}
+                  className="hero-hero-orb"
+                />
+              </div>
               <div className="hero-photo-container">
                 <PhotoCircle />
               </div>
-              <div className="hero-orb-container">
-                <Orb
-                  hoverIntensity={0.3}
-                  rotateOnHover={false}
-                  hue={orbHue}
-                  forceHoverState={false}
-                />
-              </div>
               <div className={`hero-text ${isLoaded ? 'loaded' : ''}`}>
-                <h1 className="hero-heading">Hey, I'm Omar.</h1>
-                <p className="hero-subtitle">
-                  Developing impactful solutions with intentional simplicity.
-                </p>
+                <SplitText
+                  text="Hey, I'm Omar."
+                  tag="h1"
+                  className="hero-heading"
+                  delay={120}
+                  duration={0.8}
+                  ease="power3.out"
+                  splitType="chars"
+                  from={{ opacity: 0, y: 40 }}
+                  to={{ opacity: 1, y: 0 }}
+                  threshold={0.1}
+                  rootMargin="-100px"
+                  textAlign="center"
+                />
+                <SplitText
+                  text="Developing impactful solutions with intentional simplicity."
+                  tag="p"
+                  className="hero-subtitle"
+                  delay={50}
+                  duration={0.5}
+                  ease="power3.out"
+                  splitType="chars"
+                  from={{ opacity: 0, y: 40 }}
+                  to={{ opacity: 1, y: 0 }}
+                  threshold={0.1}
+                  rootMargin="-100px"
+                  textAlign="center"
+                />
                 <IconCarousel />
               </div>
             </div>

@@ -10,6 +10,7 @@
     "cssVariables": true,
     "prefix": ""
   },
+  "iconLibrary": "radix",
   "aliases": {
     "components": "@/Universal/Components",
     "utils": "@/Universal/Utils",
@@ -18,6 +19,7 @@
     "hooks": "@/Universal/Hooks"
   },
   "registries": {
-    "@react-bits": "https://reactbits.dev/r/{name}.json"
+    "@react-bits": "https://reactbits.dev/r/{name}.json",
+    "@skiper-ui": "https://skiper-ui.com/registry/{name}.json"
   }
 }
