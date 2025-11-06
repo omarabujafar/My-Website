@@ -29,6 +29,7 @@
       "@Pages/*": ["./Pages/*"]
     }
   },
-  "include": ["."],
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist", "**/*.d.ts", "vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

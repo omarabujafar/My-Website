@@ -80,12 +80,12 @@ export const reportWebVitals = (): void => {
   if (typeof window === 'undefined' || !window.performance) return
 
   // Only log in development mode
-  const isDevelopment = import.meta.env.DEV
+  const isDevelopment = import.meta.env?.DEV ?? true
 
   // Largest Contentful Paint (LCP) - measures loading performance
   const lcpObserver = new PerformanceObserver((list) => {
     const entries = list.getEntries()
-    const lastEntry = entries[entries.length - 1]
+    const lastEntry = entries[entries.length - 1] as any
     if (isDevelopment) {
       console.log('LCP (Largest Contentful Paint):', lastEntry.renderTime || lastEntry.loadTime, 'ms')
     }

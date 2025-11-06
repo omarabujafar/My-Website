@@ -23,18 +23,10 @@ export default defineConfig({
   },
   assetsInclude: ['**/*.lottie'],
   build: {
-    // Optimize bundle size
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console logs in production
-        drop_debugger: true,
-        passes: 2, // PERFORMANCE: Multiple passes for better compression
-      },
-      mangle: {
-        safari10: true, // Better Safari compatibility
-      },
-    },
+    // PERFORMANCE: Use esbuild for faster builds (terser is optional but smaller)
+    minify: 'esbuild',
+    // Drop console logs in production
+    drop_console: true,
     // Code splitting for better caching
     rollupOptions: {
       output: {

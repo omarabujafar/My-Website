@@ -58,6 +58,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
  * PERFORMANCE: Enable Web Vitals monitoring in development.
  * Logs performance metrics to console for optimization tracking.
  */
-if (import.meta.env.DEV) {
+if (import.meta.env?.DEV) {
   reportWebVitals()
 }

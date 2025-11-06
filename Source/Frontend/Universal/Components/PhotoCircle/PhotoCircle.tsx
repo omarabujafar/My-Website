@@ -16,7 +16,7 @@ const PhotoCircle: React.FC = () => {
         alt="Omar Abu Jafar"
         loading="eager"
         decoding="async"
-        fetchpriority="high"
+        fetchPriority="high"
       />
     </div>
   )
