@@ -2,6 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- PERFORMANCE: DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+    <!-- PERFORMANCE: Preconnect to critical origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <!-- Favicons for different color schemes -->
     <link rel="icon" type="image/svg+xml" href="/Assets/Icons/Portfolio Logo/Static/Static Logo (Light Mode).svg" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/svg+xml" href="/Assets/Icons/Portfolio Logo/Static/Static Logo (Dark Mode).svg" media="(prefers-color-scheme: dark)" />
@@ -11,6 +20,11 @@
     <link rel="apple-touch-icon" href="/Assets/Icons/Portfolio Logo/Static/Static Logo (Dark Mode).svg" media="(prefers-color-scheme: dark)" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- PERFORMANCE: Optimize rendering -->
+    <meta name="theme-color" content="#05000f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ECECF1" media="(prefers-color-scheme: light)" />
+
     <title>Omar Abu Jafar</title>
 
     <!-- Prevent flash of unstyled content by setting theme before render -->

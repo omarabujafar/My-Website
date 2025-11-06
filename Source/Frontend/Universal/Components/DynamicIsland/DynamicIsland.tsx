@@ -11,7 +11,12 @@ import { Ring } from './Components/Ring'
 import { ScreenRecord } from './Components/ScreenRecord'
 import { Timer } from './Components/Timer'
 
-const BOUNCE_VARIANTS = {
+/**
+ * Spring animation bounce intensity values for different view transitions.
+ * Lower values create less bounce, higher values create more pronounced spring effects.
+ * Each key represents a transition between two views (e.g., "timer-ring" is timer to ring).
+ */
+const SPRING_BOUNCE_ANIMATION_VARIANTS = {
   idle: 0.5,
   'ring-idle': 0.5,
   'timer-ring': 0.35,
@@ -30,22 +35,42 @@ const BOUNCE_VARIANTS = {
   'airdropMini-airdrop': 0.2,
 }
 
+/**
+ * Props interface for DynamicIsland component.
+ */
 interface DynamicIslandProps {
+  /** Current view state determining which content to display. */
   view: string
+  /** Variant key for determining spring animation bounce intensity. */
   variantKey: string
 }
 
+/**
+ * Props interface for Options component.
+ */
 interface OptionsProps {
+  /** Current view state. */
   view: string
-  setView: (v: string) => void
-  setVariantKey: (v: string) => void
+  /** Function to update the current view. */
+  setView: (viewName: string) => void
+  /** Function to update the variant key for animations. */
+  setVariantKey: (variantKeyName: string) => void
 }
 
+/**
+ * DynamicIsland component inspired by iPhone's Dynamic Island feature.
+ * Displays different interactive views (ring, timer, music, etc.) with smooth spring animations.
+ * The component morphs between states with customizable bounce effects.
+ */
 export const DynamicIsland: React.FC<DynamicIslandProps> = ({
   view,
   variantKey,
 }) => {
-  const content = useMemo(() => {
+  /**
+   * Memoized content renderer that selects which view to display.
+   * Prevents unnecessary re-renders when view hasn't changed.
+   */
+  const currentViewContent = useMemo(() => {
     switch (view) {
       case 'ring':
         return <Ring />
@@ -72,22 +97,25 @@ export const DynamicIsland: React.FC<DynamicIslandProps> = ({
     }
   }, [view])
 
+  // Get bounce intensity for current transition, defaulting to 0.2 if not defined.
+  const currentBounceIntensity =
+    SPRING_BOUNCE_ANIMATION_VARIANTS[variantKey as keyof typeof SPRING_BOUNCE_ANIMATION_VARIANTS] || 0.2
+
   return (
     <motion.div
       layout
       transition={{
         type: 'spring',
-        bounce:
-          BOUNCE_VARIANTS[variantKey as keyof typeof BOUNCE_VARIANTS] || 0.2,
+        bounce: currentBounceIntensity,
       }}
       style={{ borderRadius: 32 }}
       className="dynamic-island-capsule mx-auto w-fit min-w-[190px] overflow-hidden rounded-full bg-black shadow-lg"
     >
+      {/* Inner animated container for content transitions. */}
       <motion.div
         transition={{
           type: 'spring',
-          bounce:
-            BOUNCE_VARIANTS[variantKey as keyof typeof BOUNCE_VARIANTS] || 0.2,
+          bounce: currentBounceIntensity,
         }}
         initial={{
           scale: 0.9,
@@ -108,23 +136,70 @@ export const DynamicIsland: React.FC<DynamicIslandProps> = ({
         }}
         key={view}
       >
-        {content}
+        {currentViewContent}
       </motion.div>
     </motion.div>
   )
 }
 
+/**
+ * Options component that provides a draggable control panel for the DynamicIsland.
+ * Allows users to switch between different island views (ring, timer, music, etc.).
+ * Features a drag handle and reset button with animated icon.
+ */
 export const Options: React.FC<OptionsProps> = ({
   view,
   setView,
   setVariantKey,
 }) => {
+  /**
+   * Available view options for the Dynamic Island.
+   */
+  const availableDynamicIslandViews = [
+    'idle',
+    'ring',
+    'timer',
+    'record',
+    'music',
+    'airdrop',
+    'airdropMini',
+    'lowBattery',
+    'phone',
+    'findmy',
+    'screenRecord',
+  ]
+
+  /**
+   * Handles view button click with transition animation.
+   * Goes to idle state first, then transitions to selected view after delay.
+   */
+  const handleViewButtonClick = (selectedViewName: string) => {
+    if (selectedViewName === 'idle') {
+      setView('idle')
+      setVariantKey('idle')
+      return
+    }
+    setView('idle')
+    setTimeout(() => setView(selectedViewName), 500)
+    setVariantKey(`${view}-${selectedViewName}`)
+  }
+
+  /**
+   * Resets Dynamic Island to idle state.
+   */
+  const handleResetToIdleClick = () => {
+    setView('idle')
+    setVariantKey('idle')
+  }
+
   return (
     <motion.div
       drag
       className="border-foreground/10 bg-muted2 relative flex w-[245px] flex-col gap-3 rounded-3xl border p-3 backdrop-blur-sm"
     >
+      {/* Header with drag handle and reset button. */}
       <div className="flex items-center justify-between">
+        {/* Drag handle icon. */}
         <span className="size-4 cursor-grab active:cursor-grabbing">
           <svg className="size-4 opacity-50" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="9" r="1"/>
@@ -135,11 +210,10 @@ export const Options: React.FC<OptionsProps> = ({
             <circle cx="5" cy="15" r="1"/>
           </svg>
         </span>
+
+        {/* Reset button with rotating refresh icon on hover. */}
         <p
-          onClick={() => {
-            setView('idle')
-            setVariantKey('idle')
-          }}
+          onClick={handleResetToIdleClick}
           className="hover:bg-muted3 group flex cursor-pointer items-center justify-center gap-2 rounded-lg px-2 py-1 text-sm opacity-50"
         >
           Options
@@ -153,36 +227,17 @@ export const Options: React.FC<OptionsProps> = ({
           </span>
         </p>
       </div>
+
+      {/* View selection buttons. */}
       <div className="flex flex-wrap justify-center gap-2 pt-2">
-        {[
-          'idle',
-          'ring',
-          'timer',
-          'record',
-          'music',
-          'airdrop',
-          'airdropMini',
-          'lowBattery',
-          'phone',
-          'findmy',
-          'screenRecord',
-        ].map((v) => (
+        {availableDynamicIslandViews.map((viewOptionName) => (
           <button
             type="button"
             className="bg-muted3 text-foreground flex-1 rounded-xl px-2.5 py-1.5 text-xs"
-            onClick={() => {
-              if (v === 'idle') {
-                setView('idle')
-                setVariantKey('idle')
-                return
-              }
-              setView('idle')
-              setTimeout(() => setView(v), 500)
-              setVariantKey(`${view}-${v}`)
-            }}
-            key={v}
+            onClick={() => handleViewButtonClick(viewOptionName)}
+            key={viewOptionName}
           >
-            {v}
+            {viewOptionName}
           </button>
         ))}
       </div>

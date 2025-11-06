@@ -1,41 +1,66 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, memo } from 'react'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import './LoadingScreen.css'
+import { ANIMATION_TIMINGS } from '@Universal/Constants'
 import signatureLoopDark from '@Assets/Icons/Portfolio Logo/Animated/Dark Mode/Signature Loop.lottie'
 import signatureLoopLight from '@Assets/Icons/Portfolio Logo/Animated/Light Mode/Signature Loop.lottie'
 
-// Helper to get initial theme from localStorage or system preference
-const getInitialDarkMode = (): boolean => {
-  const savedTheme = localStorage.getItem('theme')
-  if (savedTheme) {
-    return savedTheme === 'dark'
+/**
+ * Determines the initial dark mode state from localStorage or system preferences.
+ * Checks localStorage first for saved user preference, falls back to system theme.
+ *
+ * @returns True if dark mode should be enabled, false otherwise.
+ */
+const getInitialDarkModeState = (): boolean => {
+  const savedThemePreference = localStorage.getItem('theme')
+  if (savedThemePreference) {
+    return savedThemePreference === 'dark'
   }
   return window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
+/**
+ * Loading screen component that displays an animated logo during initial page load.
+ * Features a circular reveal transition when exiting using the View Transitions API.
+ * Automatically hides after a configured duration and adapts to light/dark themes.
+ * PERFORMANCE: Optimized with useCallback and memo to prevent unnecessary re-renders.
+ */
 const LoadingScreen: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(true)
-  const [isExiting, setIsExiting] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(getInitialDarkMode)
+  const [isScreenVisible, setIsScreenVisible] = useState(true)
+  const [isExitingScreen, setIsExitingScreen] = useState(false)
+  const [isDarkModeActive, setIsDarkModeActive] = useState(getInitialDarkModeState)
 
+  // PERFORMANCE: Memoize theme change handler.
+  const handleThemeChange = useCallback(() => {
+    setIsDarkModeActive(document.documentElement.classList.contains('dark'))
+  }, [])
+
+  // Watch for theme changes using MutationObserver and update state accordingly.
   useEffect(() => {
-    // Watch for theme changes
-    const observer = new MutationObserver(() => {
-      setIsDarkMode(document.documentElement.classList.contains('dark'))
-    })
+    /**
+     * Observes document element class changes to detect theme switches.
+     * Updates dark mode state when the 'dark' class is toggled.
+     */
+    const themeChangeObserver = new MutationObserver(handleThemeChange)
 
-    observer.observe(document.documentElement, {
+    // Monitor only the 'class' attribute for changes.
+    themeChangeObserver.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class']
     })
 
-    return () => observer.disconnect()
-  }, [])
+    // Cleanup: disconnect observer on unmount.
+    return () => themeChangeObserver.disconnect()
+  }, [handleThemeChange])
 
+  // Handle loading screen exit animation after configured duration.
   useEffect(() => {
-    // Create the view transition animation styles
-    const createExitAnimation = () => {
-      const css = `
+    /**
+     * Creates and injects CSS styles for the view transition exit animation.
+     * Defines a circular reveal animation that expands from the center.
+     */
+    const createCircularRevealAnimation = () => {
+      const viewTransitionStyles = `
         ::view-transition-group(root) {
           animation-duration: 0.8s;
           animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
@@ -65,50 +90,59 @@ const LoadingScreen: React.FC = () => {
         }
       `
 
-      let styleElement = document.getElementById('loading-transition-styles') as HTMLStyleElement
+      // Find existing style element or create a new one.
+      let transitionStyleElement = document.getElementById('loading-transition-styles') as HTMLStyleElement
 
-      if (!styleElement) {
-        styleElement = document.createElement('style')
-        styleElement.id = 'loading-transition-styles'
-        document.head.appendChild(styleElement)
+      if (!transitionStyleElement) {
+        transitionStyleElement = document.createElement('style')
+        transitionStyleElement.id = 'loading-transition-styles'
+        document.head.appendChild(transitionStyleElement)
       }
 
-      styleElement.textContent = css
+      transitionStyleElement.textContent = viewTransitionStyles
     }
 
-    // After 5.2 seconds, start transitioning out
-    const exitTimer = setTimeout(() => {
-      createExitAnimation()
+    // Start exit transition after the configured loading screen duration.
+    const exitAnimationTimer = setTimeout(() => {
+      createCircularRevealAnimation()
 
-      const handleExit = () => {
-        setIsExiting(true)
-        // After transition completes, hide completely
+      /**
+       * Handles the exit animation sequence.
+       * Sets exiting state and hides screen after fade-out completes.
+       */
+      const handleScreenExit = () => {
+        setIsExitingScreen(true)
+        // Hide screen completely after fade-out animation finishes.
         setTimeout(() => {
-          setIsVisible(false)
-        }, 800)
+          setIsScreenVisible(false)
+        }, ANIMATION_TIMINGS.LOADING_SCREEN_FADEOUT_MS)
       }
 
+      // Use View Transitions API if available, otherwise fallback to direct exit.
       if (!document.startViewTransition) {
-        handleExit()
+        handleScreenExit()
       } else {
-        document.startViewTransition(handleExit)
+        document.startViewTransition(handleScreenExit)
       }
-    }, 5200)
+    }, ANIMATION_TIMINGS.LOADING_SCREEN_DURATION_MS)
 
+    // Cleanup: clear timer on unmount.
     return () => {
-      clearTimeout(exitTimer)
+      clearTimeout(exitAnimationTimer)
     }
   }, [])
 
-  if (!isVisible) {
+  // Don't render anything if screen is no longer visible.
+  if (!isScreenVisible) {
     return null
   }
 
   return (
-    <div className={`loading-screen ${isExiting ? 'loading-screen--exiting' : ''}`}>
+    <div className={`loading-screen ${isExitingScreen ? 'loading-screen--exiting' : ''}`}>
       <div className="loading-screen__content">
+        {/* Animated logo that adapts to current theme. */}
         <DotLottieReact
-          src={isDarkMode ? signatureLoopDark : signatureLoopLight}
+          src={isDarkModeActive ? signatureLoopDark : signatureLoopLight}
           autoplay
           className="loading-screen__logo"
         />
@@ -117,4 +151,8 @@ const LoadingScreen: React.FC = () => {
   )
 }
 
-export default LoadingScreen
+/**
+ * PERFORMANCE: Export memoized LoadingScreen component.
+ * Prevents unnecessary re-renders during app initialization.
+ */
+export default memo(LoadingScreen)

@@ -5,21 +5,47 @@ import { useTheme } from '../ThemeProvider/ThemeProvider'
 import { ThemeToggleButton5 } from './ThemeToggleButton5'
 import './ThemeToggle.css'
 
+/**
+ * Animation variant type for view transition effects.
+ */
 type AnimationVariant = 'circle' | 'rectangle'
+
+/**
+ * Animation start position type for view transition effects.
+ */
 type AnimationStart = 'center' | 'bottom-up'
 
-export const ThemeToggle: React.FC<{ className?: string }> = ({ className }) => {
-  const { theme, setTheme, resolvedTheme } = useTheme()
-  const [isDark, setIsDark] = useState(false)
-  const variant: AnimationVariant = 'circle'
-  const start: AnimationStart = 'bottom-up'
+/**
+ * Props interface for ThemeToggle component.
+ */
+interface ThemeToggleProps {
+  /** Additional CSS classes to apply to the toggle button. */
+  className?: string
+}
 
+/**
+ * Theme toggle component that switches between light and dark modes.
+ * Features a smooth circular reveal animation using the View Transitions API.
+ * Syncs with the global theme context and persists user preference.
+ */
+export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
+  const { theme, setTheme, resolvedTheme } = useTheme()
+  const [isDarkModeActive, setIsDarkModeActive] = useState(false)
+  const transitionAnimationVariant: AnimationVariant = 'circle'
+  const transitionAnimationStart: AnimationStart = 'bottom-up'
+
+  // Sync local dark mode state with resolved theme from context.
   useEffect(() => {
-    setIsDark(resolvedTheme === 'dark')
+    setIsDarkModeActive(resolvedTheme === 'dark')
   }, [resolvedTheme])
 
-  const createAnimation = useCallback(() => {
-    const css = `
+  /**
+   * Creates and injects CSS styles for the view transition animation.
+   * Defines a circular reveal animation that expands from the top center.
+   * The animation adapts based on the current theme (light/dark).
+   */
+  const createViewTransitionAnimation = useCallback(() => {
+    const viewTransitionStylesContent = `
       ::view-transition-group(root) {
         animation-duration: 0.8s;
         animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
@@ -66,37 +92,48 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className }) => 
       }
     `
 
-    let styleElement = document.getElementById('theme-transition-styles') as HTMLStyleElement
+    // Find existing style element or create a new one.
+    let transitionStyleElement = document.getElementById('theme-transition-styles') as HTMLStyleElement
 
-    if (!styleElement) {
-      styleElement = document.createElement('style')
-      styleElement.id = 'theme-transition-styles'
-      document.head.appendChild(styleElement)
+    if (!transitionStyleElement) {
+      transitionStyleElement = document.createElement('style')
+      transitionStyleElement.id = 'theme-transition-styles'
+      document.head.appendChild(transitionStyleElement)
     }
 
-    styleElement.textContent = css
+    transitionStyleElement.textContent = viewTransitionStylesContent
   }, [])
 
-  const toggleTheme = useCallback(() => {
-    setIsDark(!isDark)
-    createAnimation()
+  /**
+   * Handles theme toggle button click.
+   * Triggers the view transition animation and switches between light and dark themes.
+   * Falls back to immediate theme switch if View Transitions API is not available.
+   */
+  const handleThemeToggleClick = useCallback(() => {
+    setIsDarkModeActive(!isDarkModeActive)
+    createViewTransitionAnimation()
 
-    const switchTheme = () => {
+    /**
+     * Switches the theme in the global context.
+     * Called within the view transition animation for smooth visual effect.
+     */
+    const applyThemeSwitch = () => {
       setTheme(theme === 'light' ? 'dark' : 'light')
     }
 
+    // Use View Transitions API if available, otherwise fallback to direct switch.
     if (!document.startViewTransition) {
-      switchTheme()
+      applyThemeSwitch()
       return
     }
 
-    document.startViewTransition(switchTheme)
-  }, [theme, setTheme, isDark, createAnimation])
+    document.startViewTransition(applyThemeSwitch)
+  }, [theme, setTheme, isDarkModeActive, createViewTransitionAnimation])
 
   return (
     <ThemeToggleButton5
-      isDark={isDark}
-      onClick={toggleTheme}
+      isDark={isDarkModeActive}
+      onClick={handleThemeToggleClick}
       className={cn('theme-toggle', className)}
     />
   )

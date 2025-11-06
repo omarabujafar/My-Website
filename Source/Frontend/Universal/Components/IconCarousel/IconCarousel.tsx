@@ -2,7 +2,11 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import './IconCarousel.css'
 
-const icons = [
+/**
+ * Technology icons data for the carousel.
+ * Each icon represents a programming language or framework.
+ */
+const technologyIconsData = [
   { src: '/Assets/Icons/Hero Icons/JavaScript.svg', alt: 'JavaScript' },
   { src: '/Assets/Icons/Hero Icons/Java.svg', alt: 'Java' },
   { src: '/Assets/Icons/Hero Icons/Swift.svg', alt: 'Swift' },
@@ -13,22 +17,28 @@ const icons = [
   { src: '/Assets/Icons/Hero Icons/Python.svg', alt: 'Python' },
 ]
 
+/**
+ * IconCarousel component that displays a continuously scrolling technology icon strip.
+ * Features infinite horizontal animation with seamless looping.
+ * Icons are duplicated to create the illusion of an endless carousel.
+ */
 const IconCarousel: React.FC = () => {
-  // Duplicate the icons array multiple times for seamless looping
-  const duplicatedIcons = [...icons, ...icons, ...icons]
+  // Duplicate the icons array three times to create seamless infinite loop effect.
+  const duplicatedTechnologyIcons = [...technologyIconsData, ...technologyIconsData, ...technologyIconsData]
 
-  // Calculate the width of one set: icon width (40px) + gap (1.5rem = 24px) = 64px per icon
-  const iconWidth = 40
-  const gapWidth = 24 // 1.5rem
-  const singleSetWidth = icons.length * (iconWidth + gapWidth)
+  // Calculate animation distance based on icon dimensions and spacing.
+  const individualIconWidthInPixels = 40
+  const spacingGapWidthInPixels = 24 // Equivalent to 1.5rem.
+  const singleIconSetWidthInPixels = technologyIconsData.length * (individualIconWidthInPixels + spacingGapWidthInPixels)
 
   return (
     <div className="icon-carousel-container">
       <div className="icon-carousel-wrapper">
+        {/* Animated track that translates horizontally for scrolling effect. */}
         <motion.div
           className="icon-carousel-track"
           animate={{
-            x: [0, -singleSetWidth],
+            x: [0, -singleIconSetWidthInPixels],
           }}
           transition={{
             x: {
@@ -39,15 +49,18 @@ const IconCarousel: React.FC = () => {
             },
           }}
         >
-          {duplicatedIcons.map((icon, index) => (
-            <div key={index} className="icon-carousel-item">
-              <img src={icon.src} alt={icon.alt} />
+          {duplicatedTechnologyIcons.map((technologyIcon, iconIndex) => (
+            <div key={iconIndex} className="icon-carousel-item">
+              <img src={technologyIcon.src} alt={technologyIcon.alt} />
             </div>
           ))}
         </motion.div>
       </div>
-      {/* Gradient overlays for fade effect */}
+
+      {/* Left gradient overlay to fade icons at the start. */}
       <div className="icon-carousel-fade-left"></div>
+
+      {/* Right gradient overlay to fade icons at the end. */}
       <div className="icon-carousel-fade-right"></div>
     </div>
   )

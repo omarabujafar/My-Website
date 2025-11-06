@@ -2,6 +2,11 @@ import React from 'react'
 import PageTransition from '@Universal/Components/PageTransition/PageTransition'
 import './ProjectsPage.css'
 
+/**
+ * ProjectsPage component that showcases Omar's portfolio of work.
+ * Displays project cards with descriptions, technologies, and links.
+ * Wrapped in PageTransition for smooth navigation animations.
+ */
 const ProjectsPage: React.FC = () => {
   return (
     <PageTransition>

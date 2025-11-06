@@ -4,9 +4,30 @@ import { useEffect, useState } from 'react'
 import { Icons } from './Icons'
 import UserImage from '@Assets/Images/Dynamic Island/User.png'
 import LogoImage from '@Assets/Icons/Portfolio Logo/Static/Static Logo (Light Mode).svg'
+import { AIRDROP_PROGRESS_MILESTONES } from '@Universal/Constants'
 
+/**
+ * Props interface for the Airdrop component.
+ */
+interface AirdropProps {
+  setView: (view: string) => void;
+}
+
+/**
+ * Props interface for the CircularProgressLoader component.
+ */
+interface CircularProgressLoaderProps {
+  progress: number;
+  setProgress: (progress: number) => void;
+}
+
+/**
+ * Displays a minimized version of the AirDrop notification with progress indicator.
+ * Shows a single photo being received with an animated circular progress loader.
+ */
 export function AirdropMini() {
   const [progress, setProgress] = useState(0)
+
   return (
     <motion.div
       transition={{ type: 'spring', bounce: 0.5 }}
@@ -22,7 +43,7 @@ export function AirdropMini() {
           <img
             src={UserImage}
             className="absolute -right-1 bottom-0 size-6"
-            alt=""
+            alt="User avatar"
           />
         </motion.button>
         <div className="mt-4 flex w-full items-center gap-1 font-medium text-white">
@@ -34,7 +55,12 @@ export function AirdropMini() {
     </motion.div>
   )
 }
-export function Airdrop({ setView }: any) {
+
+/**
+ * Displays the full AirDrop notification dialog with accept/decline options.
+ * Shows the sender's request to share photos with preview image and action buttons.
+ */
+export function Airdrop({ setView }: AirdropProps) {
   return (
     <motion.div className="flex w-[284px] items-center gap-2 p-4">
       <div className="fcc gap-4">
@@ -50,7 +76,7 @@ export function Airdrop({ setView }: any) {
               <img
                 src={UserImage}
                 className="absolute -right-1 bottom-0 size-6"
-                alt=""
+                alt="User avatar"
               />
             </motion.button>
             <div className="text-white">
@@ -65,7 +91,7 @@ export function Airdrop({ setView }: any) {
             <img
               src={LogoImage}
               className="size-full object-cover"
-              alt=""
+              alt="Shared content preview"
             />
           </div>
         </div>
@@ -95,42 +121,50 @@ export function Airdrop({ setView }: any) {
   )
 }
 
-export default function CircularProgressLoader({ progress, setProgress }: any) {
+/**
+ * Circular progress loader component that animates from 0% to 100%.
+ * Displays an animated progress circle that transitions to a completion icon when finished.
+ * The progress animates through predefined milestones with smooth transitions.
+ */
+export default function CircularProgressLoader({ progress, setProgress }: CircularProgressLoaderProps) {
   useEffect(() => {
-    const timer25 = setTimeout(() => {
+    // Animate progress through milestones: 25% → 50% → 75% → 100% → 105% (complete).
+    const progressMilestone25Timer = setTimeout(() => {
       setProgress(25)
-    }, 600)
+    }, AIRDROP_PROGRESS_MILESTONES.MILESTONE_25_PERCENT_MS)
 
-    const timer50 = setTimeout(() => {
+    const progressMilestone50Timer = setTimeout(() => {
       setProgress(50)
-    }, 1700)
+    }, AIRDROP_PROGRESS_MILESTONES.MILESTONE_50_PERCENT_MS)
 
-    const timer75 = setTimeout(() => {
+    const progressMilestone75Timer = setTimeout(() => {
       setProgress(75)
-    }, 2100)
+    }, AIRDROP_PROGRESS_MILESTONES.MILESTONE_75_PERCENT_MS)
 
-    const timer100 = setTimeout(() => {
+    const progressMilestone100Timer = setTimeout(() => {
       setProgress(100)
-    }, 2400)
+    }, AIRDROP_PROGRESS_MILESTONES.MILESTONE_100_PERCENT_MS)
 
-    const timer105 = setTimeout(() => {
+    const progressCompleteTimer = setTimeout(() => {
       setProgress(105)
-    }, 2700)
+    }, AIRDROP_PROGRESS_MILESTONES.MILESTONE_COMPLETE_MS)
 
-    // Clean up timers
+    // Clean up all timers on component unmount to prevent memory leaks.
     return () => {
-      clearTimeout(timer25)
-      clearTimeout(timer50)
-      clearTimeout(timer75)
-      clearTimeout(timer100)
-      clearTimeout(timer105)
+      clearTimeout(progressMilestone25Timer)
+      clearTimeout(progressMilestone50Timer)
+      clearTimeout(progressMilestone75Timer)
+      clearTimeout(progressMilestone100Timer)
+      clearTimeout(progressCompleteTimer)
     }
   }, [])
 
-  const size = 50
-  const strokeWidth = 6
-  const radius = (size - strokeWidth) / 2
+  // Define the circular progress indicator dimensions.
+  const circleSize = 50
+  const circleStrokeWidth = 6
+  const circleRadius = (circleSize - circleStrokeWidth) / 2
 
+  // Configure the progress animation values for Framer Motion.
   const progressAnimation = {
     pathLength: progress / 100,
     pathOffset: 0,
@@ -185,29 +219,29 @@ export default function CircularProgressLoader({ progress, setProgress }: any) {
               className="relative size-10 text-[#159BF4]"
               viewBox="0 0 50 50"
             >
-              {/* Background circle */}
+              {/* Static background circle to show the full progress track. */}
               <circle
                 className="opacity-40"
-                strokeWidth={strokeWidth}
+                strokeWidth={circleStrokeWidth}
                 stroke="currentColor"
                 fill="transparent"
-                r={radius}
-                cx={size / 2}
-                cy={size / 2}
+                r={circleRadius}
+                cx={circleSize / 2}
+                cy={circleSize / 2}
               />
-              {/* Progress circle with framer motion */}
+              {/* Animated progress circle that fills as progress increases. */}
               <motion.circle
                 strokeLinecap="round"
                 initial={{ pathLength: 0, pathOffset: 0 }}
                 animate={progressAnimation}
                 transition={{ type: 'spring', duration: 1, bounce: 0.2 }}
-                strokeWidth={strokeWidth}
+                strokeWidth={circleStrokeWidth}
                 stroke="currentColor"
                 fill="transparent"
-                r={radius}
-                cx={size / 2}
-                cy={size / 2}
-                transform={`rotate(-90 ${size / 2} ${size / 2})`}
+                r={circleRadius}
+                cx={circleSize / 2}
+                cy={circleSize / 2}
+                transform={`rotate(-90 ${circleSize / 2} ${circleSize / 2})`}
               />
             </svg>
             <motion.div

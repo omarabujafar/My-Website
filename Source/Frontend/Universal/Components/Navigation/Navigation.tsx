@@ -5,21 +5,28 @@ import './Navigation.css'
 import GlassSurface from '../GlassSurface/GlassSurface'
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle'
 import { useLoading } from '../LoadingScreen/LoadingContext'
+import { ANIMATION_TIMINGS } from '@Universal/Constants'
 import HomeIcon from '@Assets/Icons/Navbar Icons/Home.svg'
 import AboutIcon from '@Assets/Icons/Navbar Icons/About.svg'
 import WorkIcon from '@Assets/Icons/Navbar Icons/Work.svg'
 import BlogIcon from '@Assets/Icons/Navbar Icons/Blog.svg'
 import ContactIcon from '@Assets/Icons/Navbar Icons/Contact.svg'
 
+/**
+ * Navigation component that displays a floating navigation bar with active indicator.
+ * Features a glassmorphic design with smooth animations and theme toggle integration.
+ * The active indicator smoothly animates between navigation items based on the current route.
+ */
 const Navigation: React.FC = () => {
-  const location = useLocation()
+  const currentLocation = useLocation()
   const { isLoading } = useLoading()
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [indicatorPosition, setIndicatorPosition] = useState(0)
-  const navListRef = useRef<HTMLUListElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [activeNavigationIndex, setActiveNavigationIndex] = useState(0)
+  const [indicatorHorizontalPosition, setIndicatorHorizontalPosition] = useState(0)
+  const navigationListRef = useRef<HTMLUListElement>(null)
+  const navigationContainerRef = useRef<HTMLDivElement>(null)
 
-  const navItems = [
+  // Navigation items configuration with paths, icons, and labels.
+  const navigationItems = [
     { path: '/', icon: HomeIcon, label: 'Home' },
     { path: '/projects', icon: WorkIcon, label: 'Work' },
     { path: '/about', icon: AboutIcon, label: 'About' },
@@ -27,46 +34,65 @@ const Navigation: React.FC = () => {
     { path: '/contact', icon: ContactIcon, label: 'Contact' },
   ]
 
+  // Update active navigation index when the route changes.
   useEffect(() => {
-    const currentIndex = navItems.findIndex(item => item.path === location.pathname)
-    if (currentIndex !== -1) {
-      setActiveIndex(currentIndex)
+    const matchingNavigationIndex = navigationItems.findIndex(
+      item => item.path === currentLocation.pathname
+    )
+    if (matchingNavigationIndex !== -1) {
+      setActiveNavigationIndex(matchingNavigationIndex)
     }
-  }, [location.pathname])
+  }, [currentLocation.pathname, navigationItems])
 
+  // Calculate and update the horizontal position of the active indicator.
   useEffect(() => {
-    const updateIndicatorPosition = () => {
-      if (navListRef.current && containerRef.current) {
-        const navItems = navListRef.current.children
-        if (navItems[activeIndex]) {
-          const activeItem = navItems[activeIndex] as HTMLElement
-          const link = activeItem.querySelector('.nav-link') as HTMLElement
-          if (link) {
-            const containerRect = containerRef.current.getBoundingClientRect()
-            const linkRect = link.getBoundingClientRect()
-            const position = linkRect.left - containerRect.left + linkRect.width / 2 - 21
-            setIndicatorPosition(position)
+    /**
+     * Calculates the horizontal position of the active indicator based on the active navigation item.
+     * Centers the indicator below the currently active navigation link.
+     */
+    const updateIndicatorHorizontalPosition = () => {
+      if (navigationListRef.current && navigationContainerRef.current) {
+        const navigationListItems = navigationListRef.current.children
+        if (navigationListItems[activeNavigationIndex]) {
+          const activeNavigationItem = navigationListItems[activeNavigationIndex] as HTMLElement
+          const activeLink = activeNavigationItem.querySelector('.nav-link') as HTMLElement
+
+          if (activeLink) {
+            const containerBoundingRect = navigationContainerRef.current.getBoundingClientRect()
+            const linkBoundingRect = activeLink.getBoundingClientRect()
+
+            // Calculate center position of the link relative to container, offset by indicator half-width (21px).
+            const indicatorCenterPosition =
+              linkBoundingRect.left - containerBoundingRect.left + linkBoundingRect.width / 2 - 21
+
+            setIndicatorHorizontalPosition(indicatorCenterPosition)
           }
         }
       }
     }
 
-    // Use requestAnimationFrame to ensure DOM is fully painted
-    const rafId = requestAnimationFrame(() => {
-      updateIndicatorPosition()
+    // Use requestAnimationFrame to ensure DOM is fully painted before measuring.
+    const animationFrameId = requestAnimationFrame(() => {
+      updateIndicatorHorizontalPosition()
     })
 
-    // Also update after a short delay to catch any layout shifts
-    const timeoutId = setTimeout(updateIndicatorPosition, 100)
+    // Also update after a short delay to catch any layout shifts from fonts or animations.
+    const delayTimerId = setTimeout(
+      updateIndicatorHorizontalPosition,
+      ANIMATION_TIMINGS.NAVIGATION_INDICATOR_DELAY_MS
+    )
 
-    window.addEventListener('resize', updateIndicatorPosition)
+    // Update indicator position on window resize to maintain correct alignment.
+    window.addEventListener('resize', updateIndicatorHorizontalPosition)
+
     return () => {
-      cancelAnimationFrame(rafId)
-      clearTimeout(timeoutId)
-      window.removeEventListener('resize', updateIndicatorPosition)
+      cancelAnimationFrame(animationFrameId)
+      clearTimeout(delayTimerId)
+      window.removeEventListener('resize', updateIndicatorHorizontalPosition)
     }
-  }, [activeIndex, isLoading])
+  }, [activeNavigationIndex, isLoading])
 
+  // Hide navigation during loading screen.
   if (isLoading) {
     return null
   }
@@ -78,7 +104,7 @@ const Navigation: React.FC = () => {
       animate={{ y: 0, opacity: 1, x: '-50%' }}
       transition={{
         duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        ease: [0.25, 0.46, 0.45, 0.94] // Custom cubic-bezier easing for smooth entrance.
       }}
       style={{ x: '-50%' }}
     >
@@ -99,25 +125,39 @@ const Navigation: React.FC = () => {
         blueOffset={20}
         className="navigation-glass"
       >
-        <div className="navigation-content" ref={containerRef}>
+        <div className="navigation-content" ref={navigationContainerRef}>
+          {/* Active indicator that slides horizontally to highlight the current page. */}
           <div
             className="nav-indicator"
-            style={{ transform: `translateX(${indicatorPosition}px) translateY(-50%)` }}
+            style={{
+              transform: `translateX(${indicatorHorizontalPosition}px) translateY(-50%)`
+            }}
           />
-          <ul className="nav-list" ref={navListRef}>
-          {navItems.map((item, index) => (
-            <li key={item.path} className="nav-item">
-              <Link
-                to={item.path}
-                className={`nav-link ${location.pathname === item.path ? 'nav-link--active' : ''}`}
-                aria-label={item.label}
-              >
-                <img src={item.icon} alt={item.label} className="nav-icon" />
-              </Link>
-            </li>
-          ))}
+
+          <ul className="nav-list" ref={navigationListRef}>
+            {navigationItems.map((navigationItem) => (
+              <li key={navigationItem.path} className="nav-item">
+                <Link
+                  to={navigationItem.path}
+                  className={`nav-link ${
+                    currentLocation.pathname === navigationItem.path ? 'nav-link--active' : ''
+                  }`}
+                  aria-label={navigationItem.label}
+                >
+                  <img
+                    src={navigationItem.icon}
+                    alt={navigationItem.label}
+                    className="nav-icon"
+                  />
+                </Link>
+              </li>
+            ))}
           </ul>
+
+          {/* Visual divider between navigation and theme toggle. */}
           <div className="nav-divider" />
+
+          {/* Theme toggle button for switching between light and dark modes. */}
           <ThemeToggle className="nav-theme-toggle" />
         </div>
       </GlassSurface>
