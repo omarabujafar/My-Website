@@ -175,20 +175,38 @@
     var(--background) 25%,
     transparent 35%
   );
+  /* PERFORMANCE: Softer gradient edges with wider blur radius */
   mask-image: radial-gradient(
     circle at center,
     black 0%,
-    black 58%,
-    transparent 62%
+    black 55%,
+    rgba(0, 0, 0, 0.7) 60%,
+    rgba(0, 0, 0, 0.3) 65%,
+    transparent 72%
   );
   -webkit-mask-image: radial-gradient(
     circle at center,
     black 0%,
-    black 58%,
-    transparent 62%
+    black 55%,
+    rgba(0, 0, 0, 0.7) 60%,
+    rgba(0, 0, 0, 0.3) 65%,
+    transparent 72%
   );
   pointer-events: none;
   z-index: 10;
+}
+
+/* Dark mode: Add cool indigo-blue atmospheric tint */
+.dark .hero-photo-container::after {
+  background: linear-gradient(
+    to top,
+    var(--background) 0%,
+    var(--background) 20%,
+    /* Subtle indigo-blue tint for atmospheric harmony */
+    color-mix(in oklch, var(--background) 85%, oklch(60% 0.08 265)) 28%,
+    color-mix(in oklch, var(--background) 90%, oklch(70% 0.06 270)) 32%,
+    transparent 38%
+  );
 }
 
 .hero-stack.loaded .hero-photo-container {
