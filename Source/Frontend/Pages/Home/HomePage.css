@@ -3,25 +3,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 90vh;
+  min-height: 100vh;
   width: 100%;
-}
-
-.home-header {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  background-color: red;
-  z-index: 100;
 }
 
 .home-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 4rem;
+  justify-content: center;
+  margin-top: -8rem;
 }
 
 .home-text-container {

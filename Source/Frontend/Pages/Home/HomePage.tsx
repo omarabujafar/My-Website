@@ -1,17 +1,22 @@
 import React from 'react'
+import Header from '@Universal/Components/Header/Header'
 import HeroProfile from '@Universal/Components/HeroProfile/HeroProfile'
+import IconCarousel from '@Universal/Components/IconCarousel/IconCarousel'
 import './HomePage.css'
-import '@Universal/Components/Layout.css'
+
 /* ============================================================
-   HERO SECTION
+   HOMEPAGE
    ============================================================ */
 const HomePage: React.FC = () => {
   return (
     <div className="home-page">
-      <div className="layout-header">
-      </div>
+      <Header />
+
+      {/* ============================================================
+           HERO SECTION
+           ============================================================ */}
       <div className="home-hero">
-        <HeroProfile
+        <HeroProfile 
           size="400px"
           animationDuration={15}
         />
@@ -19,10 +24,9 @@ const HomePage: React.FC = () => {
           <h1 className="home-heading">Hey, I'm Omar.</h1>
           <p className="home-subheading">Developing impactful solutions with intentional simplicity.</p>
         </div>
-      </div>
-      <div style={{ height: '2000px', padding: '2rem', backgroundColor: '#1a1a1a' }}>
-        <h2 style={{ color: 'white' }}>Temporary Content for Scroll Testing</h2>
-        <p style={{ color: 'white' }}>Scroll down to test the fixed header...</p>
+        <div className="icon-carousel-container">
+          <IconCarousel />
+        </div>
       </div>
     </div>
   )
