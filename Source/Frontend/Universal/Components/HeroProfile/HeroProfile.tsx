@@ -2,14 +2,16 @@
 
 import React, { useMemo, memo } from 'react'
 import { cn } from '@Universal/Utils/cn'
+import heroPhoto from '@Assets/Images/Omar/Hero Photo.jpg'
+import './HeroProfile.css'
 
 /**
- * Props interface for the HeroOrb component.
+ * Props interface for the HeroProfile component.
  */
-interface HeroOrbProps {
-  /** Size of the orb (e.g., "192px", "100px"). Default is "192px". */
+interface HeroProfileProps {
+  /** Size of the orb (e.g., "192px", "400px"). Default is "192px". */
   size?: string
-  /** Additional CSS classes to apply to the orb container. */
+  /** Additional CSS classes to apply to the container. */
   className?: string
   /** Custom color palette for the orb's gradient layers. */
   colors?: {
@@ -27,12 +29,12 @@ interface HeroOrbProps {
 }
 
 /**
- * HeroOrb component that renders an animated gradient orb with multiple conic gradients.
+ * HeroProfile component that combines an animated gradient orb background with a profile photo.
  * Features responsive sizing calculations for blur, contrast, and visual effects.
- * Uses CSS custom properties and conic gradients to create a dynamic, rotating orb effect.
+ * The photo circle is overlaid on top of the animated gradient orb.
  * PERFORMANCE: Memoized to prevent unnecessary re-renders of expensive gradient calculations.
  */
-const HeroOrb: React.FC<HeroOrbProps> = ({
+const HeroProfile: React.FC<HeroProfileProps> = ({
   size = "192px",
   className,
   colors,
@@ -114,7 +116,7 @@ const HeroOrb: React.FC<HeroOrbProps> = ({
 
   return (
     <div
-      className={cn("hero-orb", className)}
+      className={cn("hero-profile", className)}
       style={
         {
           width: size,
@@ -133,6 +135,20 @@ const HeroOrb: React.FC<HeroOrbProps> = ({
         } as React.CSSProperties
       }
     >
+      {/* Profile Photo Circle */}
+      <div className="hero-profile-photo">
+        <img
+          src={heroPhoto}
+          alt="Omar Abu Jafar"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+        />
+      </div>
+
+      {/* Bottom gradient mask overlay */}
+      <div className="hero-profile-mask"></div>
+
       <style>{`
         /* Register CSS custom property for angle animation. */
         @property --angle {
@@ -141,8 +157,8 @@ const HeroOrb: React.FC<HeroOrbProps> = ({
           initial-value: 0deg;
         }
 
-        /* Base orb container with circular shape and stacking context. */
-        .hero-orb {
+        /* Base hero profile container with circular shape and stacking context. */
+        .hero-profile {
           display: grid;
           grid-template-areas: "stack";
           overflow: hidden;
@@ -152,8 +168,8 @@ const HeroOrb: React.FC<HeroOrbProps> = ({
         }
 
         /* Pseudo-elements for gradient and texture layers, stacked on same grid area. */
-        .hero-orb::before,
-        .hero-orb::after {
+        .hero-profile::before,
+        .hero-profile::after {
           content: "";
           display: block;
           grid-area: stack;
@@ -164,7 +180,7 @@ const HeroOrb: React.FC<HeroOrbProps> = ({
         }
 
         /* Animated gradient layer with multiple conic gradients creating the orb effect. */
-        .hero-orb::before {
+        .hero-profile::before {
           background:
             /* Layer 1: Purple gradient from bottom-left. */
             conic-gradient(
@@ -218,7 +234,7 @@ const HeroOrb: React.FC<HeroOrbProps> = ({
         }
 
         /* Texture overlay layer with dot pattern and backdrop filter. */
-        .hero-orb::after {
+        .hero-profile::after {
           /* Radial dot pattern for texture. */
           background-image: radial-gradient(
             circle at center,
@@ -234,12 +250,12 @@ const HeroOrb: React.FC<HeroOrbProps> = ({
         }
 
         /* Disable mask for tiny orbs to maintain visibility. */
-        .hero-orb[style*="--mask-radius: 0%"]::after {
+        .hero-profile[style*="--mask-radius: 0%"]::after {
           mask-image: none;
         }
 
         /* Apply radial mask to create darker center for larger orbs. */
-        .hero-orb:not([style*="--mask-radius: 0%"])::after {
+        .hero-profile:not([style*="--mask-radius: 0%"])::after {
           mask-image: radial-gradient(
             black var(--mask-radius),
             transparent 75%
@@ -255,7 +271,7 @@ const HeroOrb: React.FC<HeroOrbProps> = ({
 
         /* Respect user's motion preferences by disabling animation. */
         @media (prefers-reduced-motion: reduce) {
-          .hero-orb::before {
+          .hero-profile::before {
             animation: none;
           }
         }
@@ -265,7 +281,7 @@ const HeroOrb: React.FC<HeroOrbProps> = ({
 }
 
 /**
- * PERFORMANCE: Export memoized HeroOrb component.
+ * PERFORMANCE: Export memoized HeroProfile component.
  * Prevents re-renders when props haven't changed, which is critical for expensive gradient calculations.
  */
-export default memo(HeroOrb)
+export default memo(HeroProfile)

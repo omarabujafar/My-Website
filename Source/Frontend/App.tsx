@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AnimatePresence } from 'framer-motion'
 import { lazy, Suspense } from 'react'
 import HomePage from '@Pages/Home/HomePage'
-import Layout from '@Universal/Components/Layout/Layout'
 import LoadingScreen from '@Universal/Components/LoadingScreen/LoadingScreen'
 
 /**
@@ -38,9 +37,8 @@ function AnimatedRoutes() {
 }
 
 /**
- * Main App component that sets up routing and layout structure.
+ * Main App component that sets up routing.
  * Includes loading screen overlay and router configuration with future flags enabled.
- * All pages are wrapped in the Layout component for consistent header/footer.
  */
 function App() {
   return (
@@ -50,9 +48,7 @@ function App() {
 
       {/* Main router with future compatibility flags enabled. */}
       <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
-        <Layout>
-          <AnimatedRoutes />
-        </Layout>
+        <AnimatedRoutes />
       </Router>
     </>
   )

@@ -1,0 +1,85 @@
+/* ============================================================
+   HERO PROFILE PHOTO
+   Handles the main circular photo and overlay effects.
+   ============================================================ */
+
+/* Main photo container. Centers the circular image perfectly. */
+.hero-profile-photo {
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* Inner shadow overlay. Adds depth and focus to the image. */
+.hero-profile-photo::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.45),
+    inset 0 0 80px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+/* Dark mode enhancement. Strengthens shadows for better contrast. */
+.dark .hero-profile-photo::after {
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.65),
+    inset 0 0 80px rgba(0, 0, 0, 0.35);
+}
+
+/* Profile image styling. Enlarges the photo and adjusts vertical position. */
+.hero-profile-photo img {
+  width: 155%;
+  height: 155%;
+  object-fit: cover;
+  object-position: 50% 60%;
+  transform: translateY(90px);
+}
+
+/* ============================================================
+   BOTTOM GRADIENT MASK
+   Adds a smooth gradient fade from the bottom for visual blending.
+   ============================================================ */
+
+/* Gradient overlay at the bottom of the hero section. */
+.hero-profile-mask {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 51%;
+  background: linear-gradient(
+    to top,
+    rgba(5, 0, 15, 1) 0%,
+    rgba(5, 0, 15, 1) 50%,
+    rgba(5, 0, 15, 0) 100%
+  );
+  border-radius: 0 0 50% 50%;
+  z-index: 2;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.hero-profile-mask::before {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(5, 0, 15, 1);
+}
